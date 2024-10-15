@@ -3,22 +3,27 @@ from konlpy.tag import Okt
 import pandas as pd 
 import time, os
 import re
+from itertools import product
 
 def multiprocessing_initializer():
     global okt
     okt = Okt()
 
-def process(i: str) -> str:
+def process(i: str, debug=False) -> str:
     okt_pos = okt.pos(i, norm=False, stem=False);
+    if debug: print(okt_pos);
+    
+    
     word_list = []
     for idx, word in enumerate(okt_pos):
-        # if word[1] not in ['Josa', 'Punctuation', 'Suffix', 'Adjective', 'Verb' ] or (word[1] == 'Josa' and idx != len(okt_pos) - 1): 
-        #     word_list.append(word[0])
-        if word[1] in ['Foreign']: continue;
-        # 조사, 구두점 제거. 조사가 마지막에 붙어있을 경우 제거하지 않음
-        if word[1] not in ['Josa', 'Punctuation', 'Suffix', 'Adjective', 'Verb' ] or (word[1] == 'Josa' and idx != len(okt_pos) - 1): 
-            word_list.append(word[0])
-    return ''.join(word_list);
+        oktlen = len(okt_pos);
+        if word[1] == 'Noun' or (word[1] == 'Suffix' and oktlen > 1 and idx == oktlen - 1 and okt_pos[idx-1][1] == 'Noun') or (word[1] == 'Josa' and oktlen > 2 and idx != oktlen - 1 and idx != 0 and okt_pos[idx-1][1] == 'Noun' and okt_pos[idx+1][1] == 'Noun'):
+            if word[1] == 'Noun': word_list.append(word[0]);
+            elif word[1] == 'Suffix': word_list.append(okt_pos[idx-1][0] + word[0]);
+            else: word_list.append(okt_pos[idx-1][0] + word[0] + okt_pos[idx+1][0]);
+    
+
+    return '\n'.join(word_list);
 
 
 
@@ -42,7 +47,7 @@ def convert():
     # toString
     i = f.read();
     # split by space or hypen
-    iarr = i.replace('-', ' ').replace('–', ' ').split(' ');
+    iarr = i.replace('-', ' ').replace('–', ' ').replace(':', ' ').split(' ');
 
     onlykoregex = re.compile(r'\d|[a-zA-Z]');
 
@@ -57,7 +62,7 @@ def convert():
     
     from multiprocessing import Pool
     with Pool(8, initializer=multiprocessing_initializer) as pool:
-        results = pool.map(process, iarr)
+        results = pool.starmap(process, zip(iarr))
     
     o = '\n'.join(results);
     
