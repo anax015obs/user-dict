@@ -1,0 +1,3 @@
+*.txt
+*.parquet
+__pycache__
