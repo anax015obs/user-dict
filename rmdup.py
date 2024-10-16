@@ -25,6 +25,8 @@ def rmdup():
         if i.endswith('니까'): continue;
         if i.endswith('로의'): continue;
 
+        schoolregex = re.compile(r'[가-힣]+학교$');
+
         map[i] = 1;
    
     o = '\n'.join([k for k, v in map.items() if v == 1]);

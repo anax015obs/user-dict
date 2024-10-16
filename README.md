@@ -1,21 +1,10 @@
-위키피디아 제목을
-korean_noun.parquet으로 저장 한다.
+1. 위키피디아 제목을 korean_noun.parquet으로 저장 한다.
 
-py index.py를 돌리고 난 후
+2. py index.py로 실행
 
-~의 로 끝나는(의$) 단어들을
-korean_noun_result.txt에서 추출하여 archive/josa(n).txt에 저장.
+3. korean_noun_result.txt를
+   archive/user_dict(n).txt로 복제
 
-수작업으로 조사 분리 해준다.
-이때 다음 정규표현식을 활용한다.
-[가-힣]{1,}[^주|회|\n]의
-왠만하면 이 정규표현식에 캡쳐되는것들만 고치면 된다.
-다만 100%는 아님.
+4. archive/legacy_okt는 현재 주석처리되어있는 okt를 사용하여 처리한것으로, 여기에 있고 kiwi에 없는 고유명사는 따로 kiwi.add_user_word에 작성
 
-그리고 korean_noun_result.txt를 archive/user_dict(n).txt로 복제한 후
-~의 를 제거
-
-archive/user_dict(n).txt에 다음 두 파일 내용을 추가한다.
-
-1. archive/josa(n).txt
-2. archive/additional.txt
+5. 배포 시 additional.txt와 병합할 것
