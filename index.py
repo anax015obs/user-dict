@@ -6,12 +6,12 @@ from archive import archive
 
 if __name__ == "__main__":
     # title에서 고유명사, 일반명사 추출
-    tokenize(); # <- 여기 인자값을 주는 순간 
+    # tokenize(); # <- 여기 인자값을 주는 순간 
     
     # 명사의 부분집합 제거
-    rmdup(); # <- 이쪽에서 중복제거가 안됨..?
+    # rmdup(); # <- 이쪽에서 중복제거가 안됨..?
 
-    # es가 쪼갤 수 있는 명사만 추출 
+    # es가 합성할 수 없는 명사만 추출
     # es 필요
     verify();
 

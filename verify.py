@@ -2,11 +2,11 @@ import requests
 import time
 import os
 
-def isDividable(i: str):
+def mergable(i: str):
     import json
 
     host = 'http://10.0.12.93:30200'
-    path = '/test2/_analyze'
+    path = '/test1/_analyze'
     body = dict();
     
     body['analyzer'] = "nori_analyzer";
@@ -19,14 +19,19 @@ def isDividable(i: str):
 
     json = response.json();
 
-    tokens = json.get('detail').get('tokenizer').get('tokens');
+    tokens: list = json.get('detail').get('tokenizer').get('tokens');
 
+    _mergable = False;
+
+    for token in tokens:
+        if token.get('token') == i:
+            _mergable = True;
+            break;
     
-    print(json);
-    if len(tokens) == 1:
-        return False;
-    else:
-        return True;
+    if not _mergable:
+        print('Found unmergable ', i);
+    
+    return _mergable;
     
 def verify():
     i = open('korean_noun_result.txt', 'r', encoding='utf-8').read();
@@ -38,7 +43,7 @@ def verify():
     with open('korean_noun_verified.txt', 'w', encoding='utf-8') as f:
         for istr in iarr:
             # time.sleep(0.1);
-            if isDividable(istr):
+            if not mergable(istr):
                 f.write(istr + '\n');
     
     
