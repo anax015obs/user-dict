@@ -1,5 +1,6 @@
 korean_noun_verified.txt
 korean_noun_result.txt
+korean_noun_failed.txt
 korean_noun.txt
 user_dict.txt
 *.parquet
