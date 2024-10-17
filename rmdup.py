@@ -1,37 +1,94 @@
 import re;
 import time, os
+import copy
+
+def preprocess(i: str):
+    iarr = i.split('\n')
+    resultmap = dict();  
+    leastmap3 = dict();  
+    leastmap4 = dict();
+    leastmap5 = dict();
+    leastmap6 = dict();
+
+    for i in iarr:
+        if len(i) < 3: continue;   
+        elif len(i) == 6: 
+            resultmap[i] = 1;
+            leastmap6[i] = 1;
+        elif len(i) == 5:
+            resultmap[i] = 1;
+            leastmap5[i] = 1;
+        elif len(i) == 4:
+            resultmap[i] = 1;
+            leastmap4[i] = 1;
+        elif len(i) == 3:
+            resultmap[i] = 1;
+            leastmap3[i] = 1;
+    return resultmap, leastmap3, leastmap4, leastmap5, leastmap6;
+
+
+
+def process(resultmap: dict, leastmap3: dict, leastmap4: dict, leastmap5: dict, leastmap6: dict):
+    # 단어의 부분집합을 제거 ex. 체르노빌 체르노 두 개가 공존하면 체르노빌이 파괴되므로 체르노를 제거
+    
+    for i in resultmap.keys():
+        if len(i) > 6:
+            for jdx, j in enumerate(i):
+                if jdx + 6 <= len(i):
+                    subset = i[jdx:jdx+6];
+                    try:
+                        if leastmap6[subset]:
+                            resultmap[subset] = 0;
+                            break;
+                    except: continue;
+    
+    for i in resultmap.keys():
+        if len(i) > 5:
+            for jdx, j in enumerate(i):
+                if jdx + 5 <= len(i):
+                    subset = i[jdx:jdx+5];
+                    try:
+                        if leastmap5[subset]:
+                            resultmap[subset] = 0;
+                            break;
+                    except: continue;
+    
+    for i in resultmap.keys():
+        if len(i) > 4:
+            for jdx, j in enumerate(i):
+                if jdx + 4 <= len(i):
+                    subset = i[jdx:jdx+4];
+                    try:
+                        if leastmap4[subset]:
+                            resultmap[subset] = 0;
+                            break;
+                    except: continue;
+    
+    for i in resultmap.keys():
+        if len(i) > 3:
+            for jdx, j in enumerate(i):
+                if jdx + 3 <= len(i):
+                    subset = i[jdx:jdx+3];
+                    try:
+                        if leastmap3[subset]:
+                            resultmap[subset] = 0;
+                            break;
+                    except: continue;
+
+    o = '\n'.join([k for k, v in resultmap.items() if v == 1]);
+    return o;
+
 
 def rmdup():
     start = int(time.time())
-    # read file 
-    f = open('korean_noun_result.txt', 'r', encoding='utf-8');
 
-    # toString
-    i = f.read();
-
-    iarr = i.split('\n');
+    i = open('korean_noun_result.txt', 'r', encoding='utf-8').read();
     
-    map = dict();
-    
-    for i in iarr: 
-        # 한글자 제외 
-        if len(i) == 1: continue;    
+    resultmap, leastmap3, leastmap4, leastmap5, leastmap6 = preprocess(i);
+    o = process(resultmap, leastmap3, leastmap4, leastmap5, leastmap6);
 
-        if '에게로' in i: continue;
-        
-        if i.endswith('에게'): continue;
-        if i.endswith('어요'): continue;
-        if i.endswith('이여'): continue;
-        if i.endswith('니까'): continue;
-        if i.endswith('로의'): continue;
-
-        schoolregex = re.compile(r'[가-힣]+학교$');
-
-        map[i] = 1;
-   
-    o = '\n'.join([k for k, v in map.items() if v == 1]);
-    
     os.remove('korean_noun_result.txt');
     f = open('korean_noun_result.txt', 'w', encoding='utf-8');
     f.write(o);
+    
     print("***run time(sec) :", int(time.time()) - start)

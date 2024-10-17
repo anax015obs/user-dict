@@ -7,7 +7,7 @@ def archive(i: str):
     addi = open('archive/additional.txt', 'r', encoding='utf-8');
     addistr = addi.read();  
 
-    result = open('korean_noun_result.txt', 'r', encoding='utf-8');
+    result = open('korean_noun_verified.txt', 'r', encoding='utf-8');
     resultstr = result.read();
     
     o = open(i, 'w', encoding='utf-8');
