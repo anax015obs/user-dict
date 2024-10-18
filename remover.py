@@ -1,8 +1,7 @@
 import requests
-import time
 import os
 
-def mergable(i: str):
+def isMergable(i: str):
     import json
 
     host = 'http://10.0.12.93:30200'
@@ -33,7 +32,7 @@ def mergable(i: str):
     
     return _mergable;
     
-def verify():
+def removeMergable():
     i = open('korean_noun_result.txt', 'r', encoding='utf-8').read();
     iarr = i.split('\n');
     
@@ -43,7 +42,8 @@ def verify():
     with open('korean_noun_verified.txt', 'w', encoding='utf-8') as f:
         for istr in iarr:
             # time.sleep(0.1);
-            if not mergable(istr):
+            fulltext = istr.split(' ')[0];
+            if not isMergable(fulltext):
                 f.write(istr + '\n');
     
     

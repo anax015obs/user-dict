@@ -15,7 +15,7 @@ def preprocess(i: str):
     map = dict();
     for i in iarr:
         if onlykoregex.search(i): continue;
-        if len(i) < 3: continue;    
+        if len(i) == 1: continue;    
         map[i] = 1;
 
 

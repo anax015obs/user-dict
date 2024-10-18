@@ -3,5 +3,7 @@ korean_noun_result.txt
 korean_noun_failed.txt
 korean_noun.txt
 user_dict.txt
+weight_2.txt
+weight_3.txt
 *.parquet
 __pycache__
